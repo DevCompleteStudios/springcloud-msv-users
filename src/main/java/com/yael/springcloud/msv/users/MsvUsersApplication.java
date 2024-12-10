@@ -1,0 +1,13 @@
+package com.yael.springcloud.msv.users;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MsvUsersApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MsvUsersApplication.class, args);
+	}
+
+}
