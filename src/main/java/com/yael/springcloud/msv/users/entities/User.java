@@ -1,13 +1,24 @@
 package com.yael.springcloud.msv.users.entities;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import jakarta.persistence.UniqueConstraint;
 
 
 @Entity
+@Table(name="users")
 public class User {
 
     @Id
@@ -22,7 +33,20 @@ public class User {
     @Column(unique=true)
     private String username;
 
-    private Boolean enabled;
+    private Boolean enabled = true;
+
+    @Transient
+    private Boolean isAdmin;
+
+    @JsonIgnoreProperties({"handler", "hibernateLazyInitializer"})
+    @ManyToMany
+    @JoinTable(
+        name="users_roles",
+        joinColumns = { @JoinColumn(name="user_id")},
+        inverseJoinColumns = {@JoinColumn(name="role_id")},
+        uniqueConstraints= {@UniqueConstraint(columnNames={"user_id", "role_id"})}
+    )
+    private List<Role> roles;
 
 
     public Long getId() {
@@ -54,6 +78,18 @@ public class User {
     }
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+    public List<Role> getRoles() {
+        return roles;
+    }
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
 }
